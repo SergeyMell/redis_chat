@@ -3,7 +3,7 @@
   Welcome to our chat! 
 </h2>
 
-<ul>
+<ul id="message_list">
   <% @messages.each do |message| %>
       <% message_data = JSON.parse(message) %>
       <li><%= message_data['user'] %> : <%= message_data['text'] %></li>
@@ -19,3 +19,16 @@
       <%= f.submit %>
     </p>
 <% end %>
+
+<script type="text/javascript" charset="utf-8">
+  setInterval(function() {
+    $.get('<%= messages_path(:json) %>')
+        .then(function(received) {
+          $('#message_list').empty();
+          received.forEach(function(message) {
+            var messageData = JSON.parse(message);
+            $('#message_list').append("<li>" + messageData['user'] + " : " + messageData['text'] + "</li>");
+          })
+        });
+  }, 1000);
+</script>

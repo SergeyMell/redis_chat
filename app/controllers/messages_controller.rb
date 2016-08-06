@@ -5,6 +5,11 @@ class MessagesController < ApplicationController
   def index
     @user_name = $redis.get(session[:session_id])
     @messages = $redis.lrange('messages', -10, -1)
+
+    respond_to do |format|
+      format.html
+      format.json {render json: @messages}
+    end
   end
 
   def create
