@@ -6,8 +6,6 @@ class UsersController < ApplicationController
 
   def create
     user_data = params.require(:user).permit(:name)
-    puts 'params.inspect'
-    puts params.inspect
     $redis.set(session[:session_id], user_data[:name], ex: 1.hour)
     redirect_to root_path
   end
